@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FanEmployeeMapper">
+    
+    <resultMap type="FanEmployee" id="FanEmployeeResult">
+        <result property="empId"    column="emp_id"    />
+        <result property="empName"    column="emp_name"    />
+        <result property="empIdcard"    column="emp_idCard"    />
+        <result property="empGender"    column="emp_gender"    />
+        <result property="empPhone"    column="emp_phone"    />
+        <result property="empEmail"    column="emp_email"    />
+        <result property="empStatus"    column="emp_status"    />
+        <result property="empDelflag"    column="emp_delFlag"    />
+    </resultMap>
+    <resultMap type="FanEmployee" id="FanEmployeeWithDeptResult">
+        <result property="empId"    column="emp_id"    />
+        <result property="empName"    column="emp_name"    />
+        <result property="empIdcard"    column="emp_idCard"    />
+        <result property="empGender"    column="emp_gender"    />
+        <result property="empPhone"    column="emp_phone"    />
+        <result property="empEmail"    column="emp_email"    />
+        <result property="empStatus"    column="emp_status"    />
+        <result property="empDelflag"    column="emp_delFlag"    />
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+    <sql id="selectFanEmployeeVo">
+        select emp_id, emp_name, emp_idCard, emp_gender, emp_phone, emp_email, emp_status, emp_delFlag from fan_employee
+    </sql>
+
+    <sql id="selectFanEmployeeWithDeptVo">
+        select
+        a.emp_id, a.emp_name, a.emp_idCard, a.emp_gender, a.emp_phone, a.emp_email, a.emp_status, a.emp_delFlag ,b.dept_id,c.dept_name
+        from fan_employee a
+        LEFT JOIN fan_emp_dept b
+        ON a.emp_id = b.emp_id
+        LEFT JOIN fan_dept c
+        ON c.dept_id = b.dept_id
+    </sql>
+
+    <select id="selectFanEmployeeList" parameterType="FanEmployee" resultMap="FanEmployeeResult">
+    <include refid="selectFanEmployeeVo"/>
+    <where>
+        <if test="empId != null "> and emp_id = #{empId}</if>
+        <if test="empName != null  and empName != ''"> and emp_name like concat('%', #{empName}, '%')</if>
+        <if test="empIdcard != null  and empIdcard != ''"> and emp_idCard = #{empIdcard}</if>
+        <if test="empGender != null  and empGender != ''"> and emp_gender = #{empGender}</if>
+        <if test="empPhone != null  and empPhone != ''"> and emp_phone = #{empPhone}</if>
+        <if test="empEmail != null  and empEmail != ''"> and emp_email = #{empEmail}</if>
+        <if test="empStatus != null  and empStatus != ''"> and emp_status = #{empStatus}</if>
+        <if test="empDelflag != null  and empDelflag != ''"> and emp_delFlag = #{empDelflag}</if>
+    </where>
+</select>
+
+    <select id="selectFanEmployeeListWithDept" parameterType="FanEmployee" resultMap="FanEmployeeWithDeptResult">
+        <include refid="selectFanEmployeeWithDeptVo"/>
+        <where>
+            <if test="empId != null "> and a.emp_id = #{empId}</if>
+            <if test="empName != null  and empName != ''"> and emp_name like concat('%', #{empName}, '%')</if>
+            <if test="empIdcard != null  and empIdcard != ''"> and emp_idCard = #{empIdcard}</if>
+            <if test="empGender != null  and empGender != ''"> and emp_gender = #{empGender}</if>
+            <if test="empPhone != null  and empPhone != ''"> and emp_phone = #{empPhone}</if>
+            <if test="empEmail != null  and empEmail != ''"> and emp_email = #{empEmail}</if>
+            <if test="empStatus != null  and empStatus != ''"> and emp_status = #{empStatus}</if>
+            <if test="empDelflag != null  and empDelflag != ''"> and emp_delFlag = #{empDelflag}</if>
+            <if test="deptId != null and deptId != ''"> and b.dept_id = #{deptId}</if>
+            <if test="deptName != null  and deptName != ''"> and c.dept_name = #{deptName}</if>
+        </where>
+    </select>
+    
+    <select id="selectFanEmployeeById" parameterType="Long" resultMap="FanEmployeeResult">
+        <include refid="selectFanEmployeeVo"/>
+        where emp_id = #{empId}
+    </select>
+        
+    <insert id="insertFanEmployee" parameterType="FanEmployee" useGeneratedKeys="true" keyProperty="empId">
+        insert into fan_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="empName != null  and empName != ''">emp_name,</if>
+            <if test="empIdcard != null  and empIdcard != ''">emp_idCard,</if>
+            <if test="empGender != null  and empGender != ''">emp_gender,</if>
+            <if test="empPhone != null  and empPhone != ''">emp_phone,</if>
+            <if test="empEmail != null  and empEmail != ''">emp_email,</if>
+            <if test="empStatus != null  and empStatus != ''">emp_status,</if>
+            <if test="empDelflag != null  and empDelflag != ''">emp_delFlag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="empName != null  and empName != ''">#{empName},</if>
+            <if test="empIdcard != null  and empIdcard != ''">#{empIdcard},</if>
+            <if test="empGender != null  and empGender != ''">#{empGender},</if>
+            <if test="empPhone != null  and empPhone != ''">#{empPhone},</if>
+            <if test="empEmail != null  and empEmail != ''">#{empEmail},</if>
+            <if test="empStatus != null  and empStatus != ''">#{empStatus},</if>
+            <if test="empDelflag != null  and empDelflag != ''">#{empDelflag},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertFanEmployeeDept" parameterType="FanEmployee" useGeneratedKeys="true" keyProperty="Id">
+        insert into fan_emp_dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="empId != null  and empId != ''">emp_id,</if>
+            <if test="deptId != null  and deptId != ''">dept_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="empId != null  and empId != ''">#{empId},</if>
+            <if test="deptId != null  and deptId != ''">#{deptId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFanEmployee" parameterType="FanEmployee">
+    update fan_employee
+    <trim prefix="SET" suffixOverrides=",">
+        <if test="empName != null  and empName != ''">emp_name = #{empName},</if>
+        <if test="empIdcard != null  and empIdcard != ''">emp_idCard = #{empIdcard},</if>
+        <if test="empGender != null  and empGender != ''">emp_gender = #{empGender},</if>
+        <if test="empPhone != null  and empPhone != ''">emp_phone = #{empPhone},</if>
+        <if test="empEmail != null  and empEmail != ''">emp_email = #{empEmail},</if>
+        <if test="empStatus != null  and empStatus != ''">emp_status = #{empStatus},</if>
+        <if test="empDelflag != null  and empDelflag != ''">emp_delFlag = #{empDelflag},</if>
+    </trim>
+    where emp_id = #{empId}
+</update>
+    <update id="updateFanEmployeeDept" parameterType="FanEmployee">
+        update fan_emp_dept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="empName != null  and empName != ''">dept_id = #{deptId},</if>
+        </trim>
+        where emp_id = #{empId}
+    </update>
+
+
+    <delete id="deleteFanEmployeeById" parameterType="Long">
+        delete from fan_employee where emp_id = #{empId}
+    </delete>
+    <delete id="deleteFanEmployeeDeptById" parameterType="Long">
+       delete from fan_emp_dept  where emp_id = #{empId}
+    </delete>
+
+    <delete id="deleteFanEmployeeByIds" parameterType="String">
+    delete from fan_employee where emp_id in
+    <foreach item="empId" collection="array" open="(" separator="," close=")">
+        #{empId}
+    </foreach>
+</delete>
+    <delete id="deleteFanEmployeeDeptByIds" parameterType="String">
+        delete from fan_emp_dept where emp_id in
+        <foreach item="empId" collection="array" open="(" separator="," close=")">
+            #{empId}
+        </foreach>
+    </delete>
+    
+</mapper>

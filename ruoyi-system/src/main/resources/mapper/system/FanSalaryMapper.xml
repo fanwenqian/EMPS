@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FanSalaryMapper">
+    
+    <resultMap type="FanSalary" id="FanSalaryResult">
+        <result property="id"    column="id"    />
+        <result property="empId"    column="emp_id"    />
+        <result property="rapPay"    column="rap_pay"    />
+        <result property="attenPay"    column="atten_pay"    />
+        <result property="fiveinsPay"    column="fiveins_pay"    />
+        <result property="basePay"    column="base_pay"    />
+        <result property="realPay"    column="real_pay"    />
+        <result property="isPay"    column="is_pay"    />
+    </resultMap>
+
+    <sql id="selectFanSalaryVo">
+        select id, emp_id, rap_pay, atten_pay, fiveins_pay, base_pay, real_pay, is_pay from fan_salary
+    </sql>
+
+    <select id="selectFanSalaryList" parameterType="FanSalary" resultMap="FanSalaryResult">
+        <include refid="selectFanSalaryVo"/>
+        <where>  
+            <if test="empId != null "> and emp_id = #{empId}</if>
+            <if test="rapPay != null "> and rap_pay = #{rapPay}</if>
+            <if test="attenPay != null "> and atten_pay = #{attenPay}</if>
+            <if test="fiveinsPay != null "> and fiveins_pay = #{fiveinsPay}</if>
+            <if test="basePay != null "> and base_pay = #{basePay}</if>
+            <if test="realPay != null "> and real_pay = #{realPay}</if>
+            <if test="isPay != null  and isPay != ''"> and is_pay = #{isPay}</if>
+        </where>
+    </select>
+    
+    <select id="selectFanSalaryById" parameterType="Long" resultMap="FanSalaryResult">
+        <include refid="selectFanSalaryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFanSalary" parameterType="FanSalary" useGeneratedKeys="true" keyProperty="id">
+        insert into fan_salary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">emp_id,</if>
+            <if test="rapPay != null ">rap_pay,</if>
+            <if test="attenPay != null ">atten_pay,</if>
+            <if test="fiveinsPay != null ">fiveins_pay,</if>
+            <if test="basePay != null ">base_pay,</if>
+            <if test="realPay != null ">real_pay,</if>
+            <if test="isPay != null  and isPay != ''">is_pay,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">#{empId},</if>
+            <if test="rapPay != null ">#{rapPay},</if>
+            <if test="attenPay != null ">#{attenPay},</if>
+            <if test="fiveinsPay != null ">#{fiveinsPay},</if>
+            <if test="basePay != null ">#{basePay},</if>
+            <if test="realPay != null ">#{realPay},</if>
+            <if test="isPay != null  and isPay != ''">#{isPay},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFanSalary" parameterType="FanSalary">
+        update fan_salary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="empId != null ">emp_id = #{empId},</if>
+            <if test="rapPay != null ">rap_pay = #{rapPay},</if>
+            <if test="attenPay != null ">atten_pay = #{attenPay},</if>
+            <if test="fiveinsPay != null ">fiveins_pay = #{fiveinsPay},</if>
+            <if test="basePay != null ">base_pay = #{basePay},</if>
+            <if test="realPay != null ">real_pay = #{realPay},</if>
+            <if test="isPay != null  and isPay != ''">is_pay = #{isPay},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFanSalaryById" parameterType="Long">
+        delete from fan_salary where id = #{id}
+    </delete>
+
+    <delete id="deleteFanSalaryByIds" parameterType="String">
+        delete from fan_salary where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

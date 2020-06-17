@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增考勤')" />
+    <title></title>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-attendance-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">员工id：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="empId" class="form-control" type="text" required>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">早退：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="early" class="form-control" type="number" th:value="0">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">旷工：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="absenteeism" class="form-control" type="number" th:value="0">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">请假：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="askForLeave" class="form-control" type="number" th:value="0">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">迟到：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="late" class="form-control" type="number" th:value="0">
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/attendance";
+        $("#form-attendance-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-attendance-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

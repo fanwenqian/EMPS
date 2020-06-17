@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FanRapMapper">
+    
+    <resultMap type="FanRap" id="FanRapResult">
+        <result property="rapId"    column="rap_id"    />
+        <result property="empId"    column="emp_id"    />
+        <result property="rapType"    column="rap_type"    />
+        <result property="rapMessage"    column="rap_message"    />
+        <result property="rapMoney"    column="rap_money"    />
+    </resultMap>
+
+    <sql id="selectFanRapVo">
+        select rap_id, emp_id, rap_type, rap_message, rap_money from fan_rap
+    </sql>
+
+    <select id="selectFanRapList" parameterType="FanRap" resultMap="FanRapResult">
+        <include refid="selectFanRapVo"/>
+        <where>  
+            <if test="empId != null "> and emp_id = #{empId}</if>
+            <if test="rapType != null  and rapType != ''"> and rap_type = #{rapType}</if>
+            <if test="rapMessage != null  and rapMessage != ''"> and rap_message like concat('%', #{rapMessage}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectFanRapById" parameterType="Long" resultMap="FanRapResult">
+        <include refid="selectFanRapVo"/>
+        where rap_id = #{rapId}
+    </select>
+        
+    <insert id="insertFanRap" parameterType="FanRap" useGeneratedKeys="true" keyProperty="rapId">
+        insert into fan_rap
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">emp_id,</if>
+            <if test="rapType != null  and rapType != ''">rap_type,</if>
+            <if test="rapMessage != null  and rapMessage != ''">rap_message,</if>
+            <if test="rapMoney != null ">rap_money,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">#{empId},</if>
+            <if test="rapType != null  and rapType != ''">#{rapType},</if>
+            <if test="rapMessage != null  and rapMessage != ''">#{rapMessage},</if>
+            <if test="rapMoney != null ">#{rapMoney},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFanRap" parameterType="FanRap">
+        update fan_rap
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="empId != null ">emp_id = #{empId},</if>
+            <if test="rapType != null  and rapType != ''">rap_type = #{rapType},</if>
+            <if test="rapMessage != null  and rapMessage != ''">rap_message = #{rapMessage},</if>
+            <if test="rapMoney != null ">rap_money = #{rapMoney},</if>
+        </trim>
+        where rap_id = #{rapId}
+    </update>
+
+    <delete id="deleteFanRapById" parameterType="Long">
+        delete from fan_rap where rap_id = #{rapId}
+    </delete>
+
+    <delete id="deleteFanRapByIds" parameterType="String">
+        delete from fan_rap where rap_id in 
+        <foreach item="rapId" collection="array" open="(" separator="," close=")">
+            #{rapId}
+        </foreach>
+    </delete>
+    
+</mapper>

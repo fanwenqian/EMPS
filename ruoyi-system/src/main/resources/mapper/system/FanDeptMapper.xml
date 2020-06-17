@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FanDeptMapper">
+    
+    <resultMap type="FanDept" id="FanDeptResult">
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+    </resultMap>
+
+    <sql id="selectFanDeptVo">
+        select dept_id, dept_name from fan_dept
+    </sql>
+
+    <select id="selectFanDeptList" parameterType="FanDept" resultMap="FanDeptResult">
+        <include refid="selectFanDeptVo"/>
+        <where>  
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="deptName != null  and deptName != ''"> and dept_name like concat('%', #{deptName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectFanDeptById" parameterType="Long" resultMap="FanDeptResult">
+        <include refid="selectFanDeptVo"/>
+        where dept_id = #{deptId}
+    </select>
+        
+    <insert id="insertFanDept" parameterType="FanDept" useGeneratedKeys="true" keyProperty="deptId">
+        insert into fan_dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptName != null  and deptName != ''">dept_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptName != null  and deptName != ''">#{deptName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFanDept" parameterType="FanDept">
+        update fan_dept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptName != null  and deptName != ''">dept_name = #{deptName},</if>
+        </trim>
+        where dept_id = #{deptId}
+    </update>
+
+    <delete id="deleteFanDeptById" parameterType="Long">
+        delete from fan_dept where dept_id = #{deptId}
+    </delete>
+
+    <delete id="deleteFanDeptByIds" parameterType="String">
+        delete from fan_dept where dept_id in 
+        <foreach item="deptId" collection="array" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FiveinsOnefundMapper">
+    
+    <resultMap type="FiveinsOnefund" id="FiveinsOnefundResult">
+        <result property="id"    column="id"    />
+        <result property="empId"    column="emp_id"    />
+        <result property="endowmentIns"    column="endowment_ins"    />
+        <result property="medicalIns"    column="medical_ins"    />
+        <result property="unemploymentIns"    column="unemployment_ins"    />
+        <result property="empInjuryIns"    column="emp_injury_ins"    />
+        <result property="maternityIns"    column="maternity_ins"    />
+        <result property="housingFund"    column="housing_fund"    />
+    </resultMap>
+
+    <sql id="selectFiveinsOnefundVo">
+        select id, emp_id, endowment_ins, medical_ins, unemployment_ins, emp_injury_ins, maternity_ins, housing_fund from fiveins_onefund
+    </sql>
+
+    <select id="selectFiveinsOnefundList" parameterType="FiveinsOnefund" resultMap="FiveinsOnefundResult">
+        <include refid="selectFiveinsOnefundVo"/>
+        <where>  
+            <if test="empId != null "> and emp_id like concat('%', #{empId}, '%')</if>
+            <if test="endowmentIns != null "> and endowment_ins = #{endowmentIns}</if>
+            <if test="medicalIns != null "> and medical_ins = #{medicalIns}</if>
+            <if test="unemploymentIns != null "> and unemployment_ins = #{unemploymentIns}</if>
+            <if test="empInjuryIns != null "> and emp_injury_ins = #{empInjuryIns}</if>
+            <if test="maternityIns != null "> and maternity_ins = #{maternityIns}</if>
+            <if test="housingFund != null "> and housing_fund = #{housingFund}</if>
+        </where>
+    </select>
+    
+    <select id="selectFiveinsOnefundById" parameterType="Long" resultMap="FiveinsOnefundResult">
+        <include refid="selectFiveinsOnefundVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFiveinsOnefund" parameterType="FiveinsOnefund" useGeneratedKeys="true" keyProperty="id">
+        insert into fiveins_onefund
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">emp_id,</if>
+            <if test="endowmentIns != null ">endowment_ins,</if>
+            <if test="medicalIns != null ">medical_ins,</if>
+            <if test="unemploymentIns != null ">unemployment_ins,</if>
+            <if test="empInjuryIns != null ">emp_injury_ins,</if>
+            <if test="maternityIns != null ">maternity_ins,</if>
+            <if test="housingFund != null ">housing_fund,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">#{empId},</if>
+            <if test="endowmentIns != null ">#{endowmentIns},</if>
+            <if test="medicalIns != null ">#{medicalIns},</if>
+            <if test="unemploymentIns != null ">#{unemploymentIns},</if>
+            <if test="empInjuryIns != null ">#{empInjuryIns},</if>
+            <if test="maternityIns != null ">#{maternityIns},</if>
+            <if test="housingFund != null ">#{housingFund},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFiveinsOnefund" parameterType="FiveinsOnefund">
+        update fiveins_onefund
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="empId != null ">emp_id = #{empId},</if>
+            <if test="endowmentIns != null ">endowment_ins = #{endowmentIns},</if>
+            <if test="medicalIns != null ">medical_ins = #{medicalIns},</if>
+            <if test="unemploymentIns != null ">unemployment_ins = #{unemploymentIns},</if>
+            <if test="empInjuryIns != null ">emp_injury_ins = #{empInjuryIns},</if>
+            <if test="maternityIns != null ">maternity_ins = #{maternityIns},</if>
+            <if test="housingFund != null ">housing_fund = #{housingFund},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFiveinsOnefundById" parameterType="Long">
+        delete from fiveins_onefund where id = #{id}
+    </delete>
+
+    <delete id="deleteFiveinsOnefundByIds" parameterType="String">
+        delete from fiveins_onefund where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

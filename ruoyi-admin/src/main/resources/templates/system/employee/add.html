@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增员工')" />
+    <title></title>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-employee-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">员工姓名：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="empName" class="form-control" type="text" required>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">身份信息：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="empIdcard" class="form-control" type="text" required>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">性别：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_user_sex')}">
+                        <label>
+                            <input type="radio" th:id="${'empGender_' + dict.dictCode}" name="empGender" th:value="${dict.dictValue}" th:checked="${dict.default}">
+                        </label>
+                        <label th:for="${'empGender_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">联系方式：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="empPhone" class="form-control" type="text" required>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电子邮箱：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="empEmail" class="form-control" type="text">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">在职状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_fan_stay')}">
+                        <label>
+                            <input type="radio" th:id="${'empStatus_' + dict.dictCode}" name="empStatus" th:value="${dict.dictValue}" th:checked="${dict.default}">
+                        </label>
+                        <label th:for="${'empStatus_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">部门id：</label>
+                <div class="col-sm-8">
+                    <label>
+                        <input name="deptId" class="form-control" type="text">
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/employee";
+        $("#form-employee-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-employee-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

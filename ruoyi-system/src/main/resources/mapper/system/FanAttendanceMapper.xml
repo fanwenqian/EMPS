@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FanAttendanceMapper">
+    
+    <resultMap type="FanAttendance" id="FanAttendanceResult">
+        <result property="attendanceId"    column="attendance_id"    />
+        <result property="empId"    column="emp_id"    />
+        <result property="early"    column="early"    />
+        <result property="absenteeism"    column="absenteeism"    />
+        <result property="askForLeave"    column="ask_for_leave"    />
+        <result property="late"    column="late"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFanAttendanceVo">
+        select attendance_id, emp_id, early, absenteeism, ask_for_leave, late, create_time, update_time from fan_attendance
+    </sql>
+
+    <select id="selectFanAttendanceList" parameterType="FanAttendance" resultMap="FanAttendanceResult">
+        <include refid="selectFanAttendanceVo"/>
+        <where>  
+            <if test="empId != null "> and emp_id = #{empId}</if>
+            <if test="early != null "> and early = #{early}</if>
+            <if test="absenteeism != null "> and absenteeism = #{absenteeism}</if>
+            <if test="askForLeave != null "> and ask_for_leave = #{askForLeave}</if>
+            <if test="late != null "> and late = #{late}</if>
+        </where>
+    </select>
+    
+    <select id="selectFanAttendanceById" parameterType="Long" resultMap="FanAttendanceResult">
+        <include refid="selectFanAttendanceVo"/>
+        where attendance_id = #{attendanceId}
+    </select>
+        
+    <insert id="insertFanAttendance" parameterType="FanAttendance" useGeneratedKeys="true" keyProperty="attendanceId">
+        insert into fan_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">emp_id,</if>
+            <if test="early != null ">early,</if>
+            <if test="absenteeism != null ">absenteeism,</if>
+            <if test="askForLeave != null ">ask_for_leave,</if>
+            <if test="late != null ">late,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="empId != null ">#{empId},</if>
+            <if test="early != null ">#{early},</if>
+            <if test="absenteeism != null ">#{absenteeism},</if>
+            <if test="askForLeave != null ">#{askForLeave},</if>
+            <if test="late != null ">#{late},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFanAttendance" parameterType="FanAttendance">
+        update fan_attendance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="empId != null ">emp_id = #{empId},</if>
+            <if test="early != null ">early = #{early},</if>
+            <if test="absenteeism != null ">absenteeism = #{absenteeism},</if>
+            <if test="askForLeave != null ">ask_for_leave = #{askForLeave},</if>
+            <if test="late != null ">late = #{late},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where attendance_id = #{attendanceId}
+    </update>
+
+    <delete id="deleteFanAttendanceById" parameterType="Long">
+        delete from fan_attendance where attendance_id = #{attendanceId}
+    </delete>
+
+    <delete id="deleteFanAttendanceByIds" parameterType="String">
+        delete from fan_attendance where attendance_id in 
+        <foreach item="attendanceId" collection="array" open="(" separator="," close=")">
+            #{attendanceId}
+        </foreach>
+    </delete>
+    
+</mapper>
